@@ -1,21 +1,31 @@
 package org.asdt;
 
-public class Rental {
-	
-	private Movie _movie;
+import org.asdt.movie.Movie;
 
-	private int _daysRented;
+public class Rental {
+	private final Movie movie;
+	private final int daysRented;
+	private double amount;
 
 	public Rental(Movie movie, int daysRented) {
-		_movie = movie;
-		_daysRented = daysRented;
+		this.movie = movie;
+		this.daysRented = daysRented;
+		initializeAmount();
 	}
 
-	public int getDaysRented() {
-		return _daysRented;
+	private void initializeAmount() {
+		amount = movie.getPrice() + movie.getRentalBonusPrice(daysRented);
+	}
+
+	public int getFrequentRenterPoints() {
+		return 1 + movie.getFrequentRenterBonusPoints(daysRented);
+	}
+
+	public double getAmount() {
+		return amount;
 	}
 
 	public Movie getMovie() {
-		return _movie;
+		return movie;
 	}
 }

@@ -1,7 +1,10 @@
 import junit.framework.TestCase;
 import org.asdt.Customer;
-import org.asdt.Movie;
+import org.asdt.movie.Movie;
 import org.asdt.Rental;
+import org.asdt.movie.solid.ChildrensMovie;
+import org.asdt.movie.solid.NewReleaseMovie;
+import org.asdt.movie.solid.RegularMovie;
 
 public class TestCustomer extends TestCase {
 	
@@ -17,61 +20,73 @@ public class TestCustomer extends TestCase {
 	}
 	
 	public void testOneRegularOneDay(){
-		rentMovie("Indiana Jones",Movie.REGULAR,1);
+		rentRegularMovie("Indiana Jones", 1);
 		String result = client.statement();
 		assertContain(result,"Amount owed is 2.0");
 		assertContain(result,"You earned 1 frequent renter points");
 	}
 	
 	public void testOneRegularTreeDays(){
-		rentMovie("Indiana Jones",Movie.REGULAR,3);
+		rentRegularMovie("Indiana Jones", 3);
 		String result = client.statement();
 		assertContain(result,"Amount owed is 3.5");
 		assertContain(result,"You earned 1 frequent renter points");
 	}
 	
 	public void testOneChildrensOneDay(){
-		rentMovie("Finding Nemo",Movie.CHILDRENS,1);
+		rentChildrensMovie("Finding Nemo", 1);
 		String result = client.statement();
 		assertContain(result,"Amount owed is 1.5");
 		assertContain(result,"You earned 1 frequent renter points");
 	}
 	
 	public void testOneChildrensFiveDays(){
-		rentMovie("Finding Nemo",Movie.CHILDRENS,5);
+		rentChildrensMovie("Finding Nemo",  5);
 		String result = client.statement();
 		assertContain(result,"Amount owed is 4.5");
 		assertContain(result,"You earned 1 frequent renter points");
 	}
 	
 	public void testOneNewReleaseOneDay(){
-		rentMovie("Spider Man - Far from Home", Movie.NEW_RELEASE,1);
+		rentNewReleaseMovie("Spider Man - Far from Home",  1);
 		String result = client.statement();
 		assertContain(result,"Amount owed is 3.0");
 		assertContain(result,"You earned 1 frequent renter points");
 	}
 	
 	public void testOneNewReleaseTreeDays(){
-		rentMovie("Spider Man - Far from Home",Movie.NEW_RELEASE,3);
+		rentNewReleaseMovie("Spider Man - Far from Home", 3);
 		String result = client.statement();
 		assertContain(result,"Amount owed is 9.0");
 		assertContain(result,"You earned 2 frequent renter points");
 	}
 	
 	public void testManyRents(){
-		rentMovie("Spider Man - Far from Home",Movie.NEW_RELEASE,2);
-		rentMovie("Dune",Movie.NEW_RELEASE,3);
-		rentMovie("Finding Nemo",Movie.CHILDRENS,3);
-		rentMovie("Indiana Jones",Movie.REGULAR,2);
-		rentMovie("The Lion King",Movie.CHILDRENS,4);
-		rentMovie("Matrix",Movie.REGULAR,3);
+		rentNewReleaseMovie("Spider Man - Far from Home", 2);
+		rentNewReleaseMovie("Dune", 3);
+		rentChildrensMovie("Finding Nemo", 3);
+		rentRegularMovie("Indiana Jones", 2);
+		rentChildrensMovie("The Lion King", 4);
+		rentRegularMovie("Matrix", 3);
 		String result = client.statement();
 		assertContain(result,"Amount owed is 25.0");
 		assertContain(result,"You earned 8 frequent renter points");
 	}
 	
-	private void rentMovie(String title, int type, int days) {
-		Movie movie = new Movie(title,type);
+	private void rentRegularMovie(String title, int days) {
+		Movie movie = new RegularMovie(title);
+		Rental rent = new Rental(movie,days);
+		client.addRental(rent);
+	}
+
+	private void rentChildrensMovie(String title, int days) {
+		Movie movie = new ChildrensMovie(title);
+		Rental rent = new Rental(movie,days);
+		client.addRental(rent);
+	}
+
+	private void rentNewReleaseMovie(String title, int days) {
+		Movie movie = new NewReleaseMovie(title);
 		Rental rent = new Rental(movie,days);
 		client.addRental(rent);
 	}
