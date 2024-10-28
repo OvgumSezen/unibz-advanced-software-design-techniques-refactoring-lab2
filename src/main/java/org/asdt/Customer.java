@@ -7,9 +7,9 @@ public class Customer {
 	private final String name;
 	private final List<Rental> rentals = new ArrayList<>();
 
-	public Customer(String name) {
+	public Customer(String name) throws Exception {
 		if(" ".equals(name)) {
-			throw new IllegalArgumentException("variable \"name\" cannot be empty.");
+			throw new Exception("variable \"name\" cannot be empty.");
 		}
 		this.name = name;
 	}
