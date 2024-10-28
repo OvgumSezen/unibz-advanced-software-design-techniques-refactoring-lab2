@@ -8,6 +8,9 @@ public class Customer {
 	private final List<Rental> rentals = new ArrayList<>();
 
 	public Customer(String name) {
+		if(" ".equals(name)) {
+			throw new IllegalArgumentException("variable \"name\" cannot be empty.");
+		}
 		this.name = name;
 	}
 

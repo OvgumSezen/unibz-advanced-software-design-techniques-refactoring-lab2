@@ -92,7 +92,7 @@ public class TestCustomer extends TestCase {
 	}
 
 	private void assertContain(String result, String content) {
-		assertTrue(result.indexOf(content)>=0);
+		assertTrue(result.contains(content));
 	}
 
 }
